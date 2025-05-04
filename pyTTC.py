@@ -78,7 +78,7 @@ offset = 0
 last_modified_time = 0
 while True:
     #Download portion of loop
-    if interval == dl_interval:
+    if interval >= dl_interval:
         download()
         #Reset interval
         print("Done with this run, waiting " + str(interval) + " seconds.")
