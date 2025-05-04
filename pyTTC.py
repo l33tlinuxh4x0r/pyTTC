@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import zipfile
 import datetime
@@ -6,6 +7,7 @@ import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+
 #Selenium vars
 options = webdriver.ChromeOptions()
 options.add_argument("--headless")
@@ -76,20 +78,25 @@ interval = dl_interval
 #Offset to compensate for upload time so that download time is accurate
 offset = 0
 last_modified_time = 0
-while True:
-    #Download portion of loop
-    if interval >= dl_interval:
-        download()
-        #Reset interval
-        print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading, waiting " + str(interval) + " seconds.")
-        interval = 0
 
-    #Upload portion of loop (only upload if needed.)
-    if os.path.isfile(file_path):
-        current_modified_time = os.path.getmtime(file_path)
-        if current_modified_time != last_modified_time:
-            upload()
-            last_modified_time = current_modified_time
-            interval += offset
-    time.sleep(1)
-    interval += 1
+try:
+    while True:
+        #Download portion of loop
+        if interval >= dl_interval:
+            download()
+            #Reset interval
+            print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading, waiting " + str(interval) + " seconds.")
+            interval = 0
+
+        #Upload portion of loop (only upload if needed.)
+        if os.path.isfile(file_path):
+            current_modified_time = os.path.getmtime(file_path)
+            if current_modified_time != last_modified_time:
+                upload()
+                last_modified_time = current_modified_time
+                interval += offset
+        time.sleep(1)
+        interval += 1
+except KeyboardInterrupt:
+    print("\nCtrl+C pressed, exiting...")
+    sys.exit(0)  # Exit cleanly
