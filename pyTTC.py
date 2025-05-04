@@ -87,7 +87,6 @@ while True:
     #Upload portion of loop (check every 5 minutes, only upload if needed.)
     if os.path.isfile(file_path):
         current_modified_time = os.path.getmtime(file_path)
-
         if current_modified_time != last_modified_time:
             upload()
             last_modified_time = current_modified_time
