@@ -1,6 +1,7 @@
 import os
 import time
 import zipfile
+import datetime
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -68,7 +69,6 @@ def upload():
         print("Upload Completed.")
         offset = runs
         runs = 0
-
     driver.quit()
 
 #Main loop
@@ -81,16 +81,15 @@ while True:
     if interval >= dl_interval:
         download()
         #Reset interval
-        print("Done with this run, waiting " + str(interval) + " seconds.")
+        print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading, waiting " + str(interval) + " seconds.")
         interval = 0
 
-    #Upload portion of loop (check every 5 minutes, only upload if needed.)
+    #Upload portion of loop (check every $interval minutes, only upload if needed.)
     if os.path.isfile(file_path):
         current_modified_time = os.path.getmtime(file_path)
         if current_modified_time != last_modified_time:
             upload()
             last_modified_time = current_modified_time
             interval += offset
-    else:
-        interval += 1
-        time.sleep(1)
+    time.sleep(1)
+    interval += 1
