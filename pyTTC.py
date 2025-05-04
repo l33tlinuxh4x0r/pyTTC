@@ -5,12 +5,12 @@ import datetime
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-
+from selenium.webdriver.chrome.options import Options
 #Selenium vars
-options = webdriver.FirefoxOptions()
+options = webdriver.ChromeOptions()
 options.add_argument("--headless")
-driver = webdriver.Firefox(options=options)
+options.add_argument('--log-level=3')
+driver = webdriver.Chrome(options=options)
 
 #How often to run!
 dl_interval = 300
@@ -69,7 +69,7 @@ def upload():
         print("Upload Completed.")
         offset = runs
         runs = 0
-    driver.quit()
+    #driver.quit()
 
 #Main loop
 interval = dl_interval
@@ -84,7 +84,7 @@ while True:
         print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading, waiting " + str(interval) + " seconds.")
         interval = 0
 
-    #Upload portion of loop (check every $interval minutes, only upload if needed.)
+    #Upload portion of loop (only upload if needed.)
     if os.path.isfile(file_path):
         current_modified_time = os.path.getmtime(file_path)
         if current_modified_time != last_modified_time:
