@@ -75,7 +75,7 @@ def upload():
 interval = dl_interval
 #Offset to compensate for upload time so that download time is accurate
 offset = 0
-last_modified_time = os.path.getmtime(file_path)
+last_modified_time = 0
 while True:
     #Download portion of loop
     if interval == dl_interval:
@@ -84,8 +84,10 @@ while True:
         print("Done with this run, waiting " + str(interval) + " seconds.")
         interval = 0
 
-        #Upload portion of loop (check every 5 minutes, only upload if needed.)
+    #Upload portion of loop (check every 5 minutes, only upload if needed.)
+    if os.path.isfile(file_path):
         current_modified_time = os.path.getmtime(file_path)
+
         if current_modified_time != last_modified_time:
             upload()
             last_modified_time = current_modified_time
