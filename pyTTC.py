@@ -77,8 +77,10 @@ def upload():
 interval = dl_interval
 #Offset to compensate for upload time so that download time is accurate
 offset = 0
-last_modified_time = 0
-
+if os.path.isfile(file_path):
+    last_modified_time = os.path.getmtime(file_path)
+else:
+    last_modified_time = 0
 try:
     while True:
         #Download portion of loop
