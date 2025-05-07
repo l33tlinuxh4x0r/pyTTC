@@ -105,4 +105,5 @@ try:
         interval += 1
 except KeyboardInterrupt:
     print("\nCtrl+C pressed, exiting...")
+    driver.quit()
     sys.exit(0)  # Exit cleanly
