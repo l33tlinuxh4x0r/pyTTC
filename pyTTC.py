@@ -6,20 +6,20 @@ import datetime
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-
-#Selenium vars
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")
-options.add_argument('--log-level=3')
-driver = webdriver.Chrome(options=options)
+from selenium.webdriver.firefox.options import Options
 
 #How often to run!
 dl_interval = 300
 
+#Selenium vars
+options = webdriver.FirefoxOptions()
+options.add_argument("--headless")
+options.add_argument('--log-level=3')
+driver = webdriver.Firefox(options=options)
+
 #Setup paths
 windows_dir = os.path.expanduser("~\\Documents\\" + "Elder Scrolls Online\\live\\AddOns\\TamrielTradeCentre\\")
-linux_dir = "/home/$USER/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/live/AddOns/TamrielTradeCentre/"
+linux_dir = "~/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/live/AddOns/TamrielTradeCentre/"
 
 dl_folder = os.path.expanduser("~/Downloads/")
 dl_file = os.path.join(dl_folder + "PriceTable.zip")
@@ -30,7 +30,11 @@ if os.name == 'nt':
     file_path = os.path.abspath(os.path.expanduser("~\\Documents\\") + "Elder Scrolls Online\\live\\SavedVariables\\TamrielTradeCentre.lua")
 else:
     extract_folder = os.path.abspath(linux_dir)
-    file_path = os.path.abspath("/home/$USER/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/live/SavedVariables/TamrielTradeCentre.lua")
+    file_path = os.path.abspath("~/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/live/SavedVariables/TamrielTradeCentre.lua")
+
+# #Selenium final setup
+# driver = webdriver.Firefox(options=options)
+
 
 def download():
     #Download Price Table from TTC
