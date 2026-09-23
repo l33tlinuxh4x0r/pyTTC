@@ -55,13 +55,15 @@ def download():
         for chunk in requests.get("https://us.tamrieltradecentre.com/download/PriceTable").iter_content(chunk_size=128):
             fd.write(chunk)
     #Extract Price Table and keep modification timestamp
-    with zipfile.ZipFile(dl_file, 'r') as zipped:
-        for file in zipped.infolist():
-            zipped.extract(file, extract_folder)
-            timestamp = time.mktime(file.date_time + (0, 0, -1))
-            unzipped_file = os.path.join(extract_folder, file.filename)
-            os.utime(unzipped_file, (timestamp, timestamp))
-
+    try:
+        with zipfile.ZipFile(dl_file, 'r') as zipped:
+            for file in zipped.infolist():
+                zipped.extract(file, extract_folder)
+                timestamp = time.mktime(file.date_time + (0, 0, -1))
+                unzipped_file = os.path.join(extract_folder, file.filename)
+                os.utime(unzipped_file, (timestamp, timestamp))
+    except:
+        print("Corrupt zip file, removing.")
     #Delete Downloaded zip file
     if os.path.exists(dl_file):
         os.remove(dl_file)
