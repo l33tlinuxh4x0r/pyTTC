@@ -89,7 +89,7 @@ def upload():
 
 #Main loop
 download()
-print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading, try to only do this once a day.\nNote: this runs once every time the script is launched.")
+print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading, try to only do this once a day.\nNote: This runs once every time the script is launched.")
 last_modified_time = 0
 try:
     while True:
