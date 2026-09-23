@@ -63,7 +63,7 @@ def download():
                 unzipped_file = os.path.join(extract_folder, file.filename)
                 os.utime(unzipped_file, (timestamp, timestamp))
     except:
-        print("Corrupt zip file, removing.")
+        print("Corrupt download, removing.")
     #Delete Downloaded zip file
     if os.path.exists(dl_file):
         os.remove(dl_file)
@@ -93,31 +93,18 @@ def upload():
     #driver.quit()
 
 #Main loop
-interval = dl_interval
-#Offset to compensate for upload time so that download time is accurate
-offset = 0
-if os.path.isfile(file_path):
-    last_modified_time = os.path.getmtime(file_path)
-else:
-    last_modified_time = 0
+download()
+print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading, try to only do this once a day.\nNote: this runs once every time the script is launched.")
+last_modified_time = 0
 try:
     while True:
-        #Download portion of loop
-        if interval >= dl_interval:
-            download()
-            #Reset interval
-            print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading, waiting " + str(interval) + " seconds.")
-            interval = 0
-
         #Upload portion of loop (only upload if needed.)
         if os.path.isfile(file_path):
             current_modified_time = os.path.getmtime(file_path)
             if current_modified_time != last_modified_time:
                 upload()
                 last_modified_time = current_modified_time
-                interval += offset
         time.sleep(1)
-        interval += 1
 except KeyboardInterrupt:
     print("\nCtrl+C pressed, exiting...")
     driver.quit()
