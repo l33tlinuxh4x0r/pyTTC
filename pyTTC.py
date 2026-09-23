@@ -3,20 +3,33 @@ import sys
 import time
 import zipfile
 import datetime
+import platform
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 
 #How often to run!
 dl_interval = 300
 
 #Selenium vars
-options = webdriver.FirefoxOptions()
+options = Options()
 options.add_argument("--headless")
 options.add_argument('--log-level=3')
-driver = webdriver.Firefox(options=options)
 
+#Fix Gentoo binary location/nomenclature and still allow to run on other distros correctly.
+info = platform.freedesktop_os_release()
+try:
+    if info.get("ID") == "gentoo":
+        options.binary_location = "/usr/bin/firefox-bin"
+        service = Service(executable_path="/usr/bin/geckodriver")
+        driver = webdriver.Firefox(options=options, service=service)
+    else:
+        driver = webdriver.Firefox(options=options)
+except:
+    driver = webdriver.Firefox(options=options)
+    
 #Setup paths
 windows_dir = os.path.expanduser("~\\Documents\\" + "Elder Scrolls Online\\live\\AddOns\\TamrielTradeCentre\\")
 linux_dir = os.path.expanduser("~/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/live/AddOns/TamrielTradeCentre/")
