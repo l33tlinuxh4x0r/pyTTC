@@ -45,10 +45,6 @@ else:
     extract_folder = os.path.abspath(linux_dir)
     file_path = os.path.abspath(os.path.expanduser("~/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/live/SavedVariables/TamrielTradeCentre.lua"))
 
-# #Selenium final setup
-# driver = webdriver.Firefox(options=options)
-
-
 def download():
     #Download Price Table from TTC
     with open(dl_file, 'wb') as fd:
@@ -90,7 +86,6 @@ def upload():
         print("Upload Completed.")
         offset = runs
         runs = 0
-    #driver.quit()
 
 #Main loop
 download()
