@@ -6,8 +6,6 @@ import datetime
 import platform
 import requests
 
-from pynput import keyboard
-
 UPLOAD_URL = f"https://us.tamrieltradecentre.com"
 
 #Setup paths
