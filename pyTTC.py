@@ -5,31 +5,11 @@ import zipfile
 import datetime
 import platform
 import requests
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
 
-#How often to run!
-dl_interval = 300
+from pynput import keyboard
 
-#Selenium vars
-options = Options()
-options.add_argument("--headless")
-options.add_argument('--log-level=3')
+UPLOAD_URL = f"https://us.tamrieltradecentre.com"
 
-#Fix Gentoo binary location/nomenclature and still allow to run on other distros correctly.
-info = platform.freedesktop_os_release()
-try:
-    if info.get("ID") == "gentoo":
-        options.binary_location = "/usr/bin/firefox-bin"
-        service = Service(executable_path="/usr/bin/geckodriver")
-        driver = webdriver.Firefox(options=options, service=service)
-    else:
-        driver = webdriver.Firefox(options=options)
-except:
-    driver = webdriver.Firefox(options=options)
-    
 #Setup paths
 windows_dir = os.path.expanduser("~\\Documents\\" + "Elder Scrolls Online\\live\\AddOns\\TamrielTradeCentre\\")
 linux_dir = os.path.expanduser("~/.steam/steam/steamapps/compatdata/306130/pfx/drive_c/users/steamuser/My Documents/Elder Scrolls Online/live/AddOns/TamrielTradeCentre/")
@@ -64,28 +44,23 @@ def download():
     if os.path.exists(dl_file):
         os.remove(dl_file)
 
-def upload():
-    #Use selenium to control webclient to upload to TTC
+def upload(): 
+    with open(file_path, 'rb') as f:
+        files = {
+            'FileUpload': ('TamrielTradeCentre.lua', f, 'application/octet-stream')
+        }
 
-    #Upload data
-    driver.get("https://us.tamrieltradecentre.com/pc/Trade/WebClient")
-    file_input = driver.find_element(By.CSS_SELECTOR, "input[type='file']")
-    file_input.send_keys(file_path)
-
-    #Check that upload completed sucessfully
-    runs = 0
-    msgs = driver.find_elements(By.ID, "web-client-console-panel")
-    for msg in msgs:
-        if "Upload Completed" in msg.text:
-            pass
-        elif runs == 5:
-            print("Upload Failed.")
-        else:
-            time.sleep(5)
-            runs +=1
-        print("Upload Completed.")
-        offset = runs
-        runs = 0
+        try:
+            # Post the multipart form data
+            response = requests.post(UPLOAD_URL, files=files)
+            
+            if response.status_code == 200:
+                print(time.strftime("%H:%M:%S", time.localtime()) + " Success! Data successfully sent to Tamriel Trade Centre.")
+            else:
+                print(f"Failed to upload. Server responded with status code: {response.status_code}")
+                
+        except requests.exceptions.RequestException as e:
+            print(f"An error occurred while connecting to TTC: {e}")
 
 #Main loop
 download()
@@ -102,5 +77,4 @@ try:
         time.sleep(1)
 except KeyboardInterrupt:
     print("\nCtrl+C pressed, exiting...")
-    driver.quit()
     sys.exit(0)  # Exit cleanly
