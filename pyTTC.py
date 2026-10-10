@@ -76,7 +76,7 @@ try:
                 interval += 5
                 last_modified_time = current_modified_time    
         if interval >= dl_interval:
-            #download()
+            download()
             interval = 0
             
         time.sleep(1)
