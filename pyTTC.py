@@ -66,7 +66,6 @@ def download():
 dl_interval = 3600
 interval = dl_interval
 last_modified_time = 0
-page_text = ""
 
 try:
     while True:
@@ -77,7 +76,7 @@ try:
                 interval += 5
                 last_modified_time = current_modified_time    
         if interval >= dl_interval:
-            download()
+            #download()
             interval = 0
             
         time.sleep(1)
