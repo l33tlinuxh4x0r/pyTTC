@@ -63,7 +63,7 @@ def download():
         os.remove(dl_file)
 
 #Download interval equals one hour
-dl_interval = 216000
+dl_interval = 3600
 interval = dl_interval
 last_modified_time = 0
 page_text = ""
