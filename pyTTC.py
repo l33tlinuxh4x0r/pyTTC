@@ -33,7 +33,7 @@ def upload():
     file_input = driver.find_element(By.CSS_SELECTOR, "input[type='file']")
     file_input.send_keys(up_file)
 
-    print("Waiting for upload to complete...")
+    print(time.strftime("%H:%M:%S", time.localtime()) + " Waiting for upload to complete...")
     page_text = driver.find_element(By.TAG_NAME, "body").text
     while "UPLOADING..." in page_text:
         time.sleep(2)
