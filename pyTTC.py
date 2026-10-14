@@ -57,7 +57,7 @@ def download():
                 os.utime(unzipped_file, (timestamp, timestamp))
         print(time.strftime("%H:%M:%S", time.localtime()) + " Finished Downloading! You have the latest version of the Price Table.")
     except:
-        print("Corrupt download, removing.")
+        print(time.strftime("%H:%M:%S", time.localtime()) + " Corrupt download, removing.")
     #Delete Downloaded zip file
     if os.path.exists(dl_file):
         os.remove(dl_file)
