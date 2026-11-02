@@ -33,13 +33,14 @@ def upload():
     file_input = driver.find_element(By.CSS_SELECTOR, "input[type='file']")
     file_input.send_keys(up_file)
 
-    print(time.strftime("%H:%M:%S", time.localtime()) + " Waiting for upload to complete...")
     page_text = driver.find_element(By.TAG_NAME, "body").text
     while "UPLOADING..." in page_text:
-        time.sleep(2)
+        time.sleep(1)
         page_text = driver.find_element(By.TAG_NAME, "body").text
-        
-    print(time.strftime("%H:%M:%S", time.localtime()) + " Success! Data successfully sent to Tamriel Trade Centre.")
+        if "Upload Completed" in page_text:    
+            print(time.strftime("%H:%M:%S", time.localtime()) + " Success! Data successfully sent to Tamriel Trade Centre.")
+        else:
+            print(time.strftime("%H:%M:%S", time.localtime()) + " Waiting for upload to complete...")
     driver.close()
 
 def download():
