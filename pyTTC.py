@@ -34,13 +34,11 @@ def upload():
     file_input.send_keys(up_file)
 
     page_text = driver.find_element(By.TAG_NAME, "body").text
-    while "UPLOADING..." in page_text:
+    while "Upload Completed" not in page_text:
+        print(time.strftime("%H:%M:%S", time.localtime()) + " Waiting for upload to complete...")
         time.sleep(1)
-        page_text = driver.find_element(By.TAG_NAME, "body").text
-        if "Upload Completed" in page_text:    
-            print(time.strftime("%H:%M:%S", time.localtime()) + " Success! Data successfully sent to Tamriel Trade Centre.")
-        else:
-            print(time.strftime("%H:%M:%S", time.localtime()) + " Waiting for upload to complete...")
+        page_text = driver.find_element(By.TAG_NAME, "body").text   
+    print(time.strftime("%H:%M:%S", time.localtime()) + " Success! Data successfully sent to Tamriel Trade Centre.")
     driver.close()
 
 def download():
@@ -74,7 +72,7 @@ try:
             current_modified_time = os.path.getmtime(up_file)
             if current_modified_time != last_modified_time:
                 upload()
-                interval += 5
+                interval += 1
                 last_modified_time = current_modified_time    
         if interval >= dl_interval:
             download()
